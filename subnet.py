@@ -17,7 +17,6 @@ class IP:
     host_prefix: str = ""
     host_bin: str = ""
     usable_hosts: str = ""
-    ip_class: str = ""
 
     def __init__(self, cidr):
         # Check if CIDR is properly formatted
@@ -70,16 +69,6 @@ class IP:
         bit_count = bin(mask_complement).count('1')
         self.usable_hosts = (2 ** bit_count - 2) if bit_count > 0 else 0
 
-        # Get IP Class
-        first_octet = int(self.ip_addr.split('.')[0])
-        ip_classes = {
-            (0 < first_octet <= 127): 'A',
-            (128 <= first_octet <= 191): 'B',
-            (192 <= first_octet <= 223): 'C'
-        }
-        self.ip_class = next((val for cond, val in ip_classes.items() if cond), None)
-
-
 def main():
     if len(sys.argv) < 2:
         print(f"Usage {sys.argv[0]} <CIDR>")
@@ -97,7 +86,6 @@ def main():
         print(f"Network Prefix: {ip.network_prefix} ({ip.network_bin})")
         print(f"Host Prefix: {ip.host_prefix} ({ip.host_bin})")
         print(f"Usable Hosts: {ip.usable_hosts}")
-        print(f"IP Class: {ip.ip_class}")
     except ValueError as e:
         print(e)
         sys.exit(1)
